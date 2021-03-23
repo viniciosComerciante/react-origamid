@@ -1,9 +1,10 @@
-import React, {} from "react";
+import React from "react";
 import ExercicioArray from "./ExercicioArray";
 import Eventos from "./Eventos";
 import Header from "./Header";
 import Footer from "./Footer";
 import Form from "./Form/Form";
+import State from "./State";
 
 const Container = ({ pathname }) => {
   switch (pathname) {
@@ -12,49 +13,87 @@ const Container = ({ pathname }) => {
     case "/":
       return <div>principal</div>;
     case "/array":
-        return <ExercicioArray/>;
+      return <ExercicioArray />;
     case "/eventos":
-        console.log('opa')
-        return <Eventos/>
+      return <Eventos />;
+    case "/form":
+      return <Form />;
+    case "/state":
+      return <State />;
+    default:
+      return <div>Principal</div>;
   }
 };
 
 const App = () => {
-  let [pathname, setPathname] = React.useState('/');
+  let [pathname, setPathname] = React.useState("/");
 
   return (
     <>
       {" "}
       <ul>
         <li>
-          <a href="/header" onClick={(e) => {
+          <a
+            href="/header"
+            onClick={(e) => {
               e.preventDefault();
-              setPathname('/header')
-          }}>
+              setPathname("/header");
+            }}
+          >
             Header
           </a>
         </li>
 
         <li>
-          <a href="/array" onClick={(e)=>{
+          <a
+            href="/array"
+            onClick={(e) => {
               e.preventDefault();
-              setPathname('/array');
-          }
-          }>Array</a>
+              setPathname("/array");
+            }}
+          >
+            Array
+          </a>
         </li>
 
         <li>
-          <a href="/eventos" onClick={(e)=>{
+          <a
+            href="/eventos"
+            onClick={(e) => {
               e.preventDefault();
-              setPathname('/eventos');
-          }}>Eventos</a>
+              setPathname("/eventos");
+            }}
+          >
+            Eventos
+          </a>
         </li>
 
         <li>
-          <a href="/form">Form</a>
+          <a
+            href="/form"
+            onClick={(e) => {
+              e.preventDefault();
+              setPathname("/form");
+            }}
+          >
+            Form
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/state"
+            onClick={(e) => {
+              e.preventDefault();
+              setPathname("/state");
+            }}
+          >
+            State
+          </a>
         </li>
       </ul>
       <Container pathname={pathname}></Container>
+      <Footer></Footer>
     </>
   );
 };
