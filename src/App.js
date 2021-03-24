@@ -1,101 +1,42 @@
-import React from "react";
-import ExercicioArray from "./ExercicioArray";
-import Eventos from "./Eventos";
-import Header from "./Header";
-import Footer from "./Footer";
-import Form from "./Form/Form";
-import State from "./State";
-
-const Container = ({ pathname }) => {
-  switch (pathname) {
-    case "/header":
-      return <Header />;
-    case "/":
-      return <div>principal</div>;
-    case "/array":
-      return <ExercicioArray />;
-    case "/eventos":
-      return <Eventos />;
-    case "/form":
-      return <Form />;
-    case "/state":
-      return <State />;
-    default:
-      return <div>Principal</div>;
-  }
-};
+import React from 'react'
+import useFetch from './useFetch';
+import useLocalStorage from './useLocalStorage';
 
 const App = () => {
-  let [pathname, setPathname] = React.useState("/");
 
-  return (
-    <>
-      {" "}
-      <ul>
-        <li>
-          <a
-            href="/header"
-            onClick={(e) => {
-              e.preventDefault();
-              setPathname("/header");
-            }}
-          >
-            Header
-          </a>
-        </li>
+  const [produto, setProduto] = useLocalStorage('produto', 'notebook');
+  const {request, data, loading, error} = useFetch();
 
-        <li>
-          <a
-            href="/array"
-            onClick={(e) => {
-              e.preventDefault();
-              setPathname("/array");
-            }}
-          >
-            Array
-          </a>
-        </li>
+ 
 
-        <li>
-          <a
-            href="/eventos"
-            onClick={(e) => {
-              e.preventDefault();
-              setPathname("/eventos");
-            }}
-          >
-            Eventos
-          </a>
-        </li>
+  React.useEffect(()=>{
+    async function fetchData(){
+      const {response, json} = await request('https://jsonplaceholder.typicode.com/comments')
+      console.log(json);
+    }
 
-        <li>
-          <a
-            href="/form"
-            onClick={(e) => {
-              e.preventDefault();
-              setPathname("/form");
-            }}
-          >
-            Form
-          </a>
-        </li>
+    fetchData();
+    
+  }, [request])
 
-        <li>
-          <a
-            href="/state"
-            onClick={(e) => {
-              e.preventDefault();
-              setPathname("/state");
-            }}
-          >
-            State
-          </a>
-        </li>
-      </ul>
-      <Container pathname={pathname}></Container>
-      <Footer></Footer>
-    </>
-  );
-};
+  if(error) return <p>{error}</p>
+ 
+  if(loading) return <p>Carregando...</p>
 
-export default App;
+  if(data){
+    return (
+      <div>
+        {data.map((comentario)=>{
+          return(
+            <h1 key={comentario.id}>{comentario.name}</h1>
+          )
+        })}
+      </div>
+    )
+  }else{
+    return null;
+  }
+  
+}
+
+export default App
