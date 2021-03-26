@@ -1,26 +1,48 @@
 import React from 'react'
-import Input from './Form/Input'
-import Radio from './Form/Radio';
-import Select from './Form/Select';
+import Input from './Form/Input';
 
 const App = () => {
 
-  const [nome, setNome] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [produto, setProduto] = React.useState('');
-  const [cor, setCor] = React.useState('vermelho');
-  const [fruta, setFruta] = React.useState('');
+  const [cep, setCep] = React.useState('');
+  const [error, setError] = React.useState(null);
+
+  function validateCep(value){
+    if(value.length === 0){
+      setError('Preencha um valor')
+      return false;
+    }else if(/^\d{5}-?\d{3}$/.test(value)){
+      setError(null)
+      return true;
+    }else{
+      setError('preencha o campo corretamente')
+      return false
+    }
+  }
+
+  function handleBlur({target}){
+    validateCep(target.value);
+  }
+
+  function handleChange({target}){
+    if(error){
+      validateCep(target.value)
+    }
+    setCep(target.value)
+  }
+
+  function handleSubmit(e){
+    e.preventDefault();
+    if(validateCep(cep)){
+      console.log('enviou')
+    }else{
+      console.log('não enviar')
+    }
+  }
 
   return (
-    <form >
-
-      <h2>Cores</h2>
-      <Radio options={['azul', 'vermelho']} value ={cor} setValue={setCor}></Radio>
-      <h2>Frutas</h2>
-      <Radio options={['laranja', 'maçã', 'limao']} value ={fruta} setValue={setFruta}></Radio>
-      <Select options={['smartphone', 'tablet']} value={produto} setValue={setProduto}></Select>
-      <Input id="nome" label="Nome" value={nome} setValue={setNome} required></Input>
-      <Input id="email" label="Email" value={email} setValue={setEmail} required></Input>
+    <form onSubmit={handleSubmit}>
+      <Input type="text" label="cep" id="cep" placeholder="00000-000" value={cep} onChange={handleChange} onBlur={handleBlur}></Input>
+      <p style={{color: 'red'}}>{error}</p>
       <button>Enviar</button>
     </form>
   )
