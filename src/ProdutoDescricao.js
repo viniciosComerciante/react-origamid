@@ -3,8 +3,7 @@ import React from 'react'
 const ProdutoDescricao = () => {
     return (
         <div>
-            <h2>Produto descricao
-            </h2>
+            <h2>Produto descricao</h2>
         </div>
     )
 }
